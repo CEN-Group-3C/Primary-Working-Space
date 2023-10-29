@@ -3,7 +3,10 @@ import Users from "./components/Users.jsx";
 import CreateUser from "./components/CreateUser.jsx";
 import useHttp from "./hooks/use-http";
 
-const serverUrl = "http://localhost:3000";
+const serverPort = 1337;
+const serverHost = "localhost";
+
+const serverUrl = "http://" + serverHost + ":" + serverPort;
 
 export default function App() {
   const [users, setUsers] = useState([]);

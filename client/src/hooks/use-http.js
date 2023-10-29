@@ -8,18 +8,19 @@ const useHttp = () => {
     setIsLoading(true);
     setError(null);
     try {
-      const response = await fetch(requestConfig.url, {
-        method: requestConfig.method ? requestConfig.method : 'GET',
-        headers: requestConfig.headers ? requestConfig.headers : {},
-        body: requestConfig.body ? requestConfig.body : null,
-      });
-
+      // const response = await fetch(requestConfig.url, {
+      //   method: requestConfig.method ? requestConfig.method : 'GET',
+      //   headers: requestConfig.headers ? requestConfig.headers : {},
+      //   body: requestConfig.body ? requestConfig.body : null,
+      // });
+      const response = await fetch(requestConfig.url, {...requestConfig});
+      
       if (!response.ok) {
-        let responseBody = await response.json();
+        let responseBody = await response.json() || {};
         throw new Error(responseBody.message);
       }
 
-      const data = await response.json();
+      const data = await response.json() || {};
       
       console.log(data);
       

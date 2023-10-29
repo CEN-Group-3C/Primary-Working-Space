@@ -1,8 +1,12 @@
-const server = require('./server.js');
-const db = require('./database.js');
+const server = require("./server.js");
+const db = require("./database.js");
+
+const PORT = process.env.PORT || 3000;
+const HOST = process.env.HOST || "localhost";
 
 db.connectToDatabase();
 
-server.listen(3000, () => {
-  console.log('Server is running on port 3000')
+server.listen(PORT, HOST, () => {
+  let host = HOST === '0.0.0.0' ? 'localhost' : HOST;
+  console.log(`Server listening on http://${host}:${PORT}`);
 });

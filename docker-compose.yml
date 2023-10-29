@@ -5,17 +5,20 @@ services:
     build:
       context: ./client
     ports:
-      - 5173:5173
+      - 3000:5173
     volumes:
       - ./client/src:/app/src
       - ./client/public:/app/public
       - dist:/app/dist
+    environment:
+      - SERVER_HOST=server
+      - SERVER_PORT=1337
   
   server:
     build:
       context: ./server
     ports:
-      - 3000:3000
+      - 1337:1337
     volumes:
       - ./server/src:/app/src
       - dist:/app/client/dist
@@ -25,6 +28,8 @@ services:
       - DB_NAME=devdb
       - DB_USER=devuser
       - DB_PASSWORD=changeme
+      - HOST=0.0.0.0
+      - PORT=1337
     depends_on:
       - db
     command: npm run dev
