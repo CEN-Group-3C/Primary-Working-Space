@@ -19,6 +19,24 @@ services:
     volumes:
       - ./server/src:/app/src
       - dist:/app/client/dist
+    environment:
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_NAME=devdb
+      - DB_USER=devuser
+      - DB_PASSWORD=changeme
+    depends_on:
+      - db
+  
+  db:
+    image: postgres:13-alpine
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=devdb
+      - POSTGRES_USER=devuser
+      - POSTGRES_PASSWORD=changeme
 
 volumes:
   dist:
+  db-data:
