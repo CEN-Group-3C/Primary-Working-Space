@@ -1,0 +1,24 @@
+version: '3.9'
+
+services:
+  client:
+    build:
+      context: ./client
+    ports:
+      - 5173:5173
+    volumes:
+      - ./client/src:/app/src
+      - ./client/public:/app/public
+      - dist:/app/dist
+  
+  server:
+    build:
+      context: ./server
+    ports:
+      - 3000:3000
+    volumes:
+      - ./server/src:/app/src
+      - dist:/app/client/dist
+
+volumes:
+  dist:

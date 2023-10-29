@@ -1,17 +1,15 @@
-FROM strapi:latest
+FROM node:20-bookworm
+LABEL maintainer="Isaac Hunter, web@ikehunter.dev"
 
-COPY ./config /app/config
-COPY ./public /app/public
-COPY ./src /app/src
 COPY ./package.json /app/package.json
 COPY ./package-lock.json /app/package-lock.json
 
 WORKDIR /app
 
-RUN npm install && \
-    npm run build
+RUN npm install
 
-EXPOSE 1337
+COPY ./src /app/src
+
+EXPOSE 3000
 
 CMD ["npm", "start"]
-
