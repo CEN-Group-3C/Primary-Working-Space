@@ -1,36 +1,34 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Users from "./components/Users.jsx";
 import CreateUser from "./components/CreateUser.jsx";
+import useHttp from "./hooks/use-http";
 
 const serverUrl = "http://localhost:3000";
 
 export default function App() {
   const [users, setUsers] = useState([]);
   const [apiError, setApiError] = useState(null);
+  const { isLoading, error, sendRequest: fetchUsers } = useHttp();
 
-  function fetchUsers() {
-    fetch(serverUrl + "/api/users")
-      .then((res) => {
-        if (res.status === 200) return res.json();
-        else {
-          throw new Error(res.json());
-        }
-      })
-      .then((users) => {
-        console.log("Returned users:", users);
+  const handleSetUsers = (data) => {
+    data.sort((a, b) => {
+      return a.id - b.id;
+    });
 
-        users.sort((a, b) => {
-          return a.id - b.id;
-        });
+    setUsers(data);
+  };
 
-        setUsers(users);
-      }).catch((error) => {
-        setApiError(error.message);
-      })
-  }
+  const handleUpdateUsers = (data) => {
+    fetchUsers({ url: serverUrl + "/api/users" }, handleSetUsers);
+  };
+
+  useEffect(() => {
+    fetchUsers({ url: serverUrl + "/api/users" }, handleSetUsers);
+  }, [fetchUsers]);
 
   function addUser(name, email, password) {
-    fetch(serverUrl + "/api/users", {
+    const config = {
+      url: serverUrl + "/api/users",
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -38,24 +36,14 @@ export default function App() {
         email: email,
         password: password,
       }),
-    })
-      .then((res) => {
-        if (res.status === 200) return res.json();
-        else {
-          throw new Error(res.json());
-        }
-      })
-      .then((data) => {
-        setApiError(null);
-        setUsers([...users, data]);
-      })
-      .catch((error) => {
-        setApiError(error.message);
-      });
+    };
+
+    fetchUsers(config, handleUpdateUsers);
   }
 
   function updateUser(id, name, email, password) {
-    fetch(serverUrl + "/api/users/" + id, {
+    const config = {
+      url: serverUrl + "/api/users/" + id,
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -63,49 +51,29 @@ export default function App() {
         email: email,
         password: password,
       }),
-    })
-      .then((res) => {
-        if (res.status === 200) return res.json();
-        else {
-          throw new Error(res.json());
-        }
-      })
-      .then((data) => {
-        setApiError(null);
-        // setUsers([...users, data]);
-        fetchUsers();
-      })
-      .catch((error) => {
-        setApiError(error.message);
-      });
+    };
+
+    console.log(config.body);
+
+    fetchUsers(config, handleUpdateUsers);
   }
-  
+
   function deleteUser(id) {
-    fetch(serverUrl + "/api/users/" + id, {
+    const config = {
+      url: serverUrl + "/api/users/" + id,
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
-    })
-      .then((res) => {
-        if (res.status === 200) return res.json();
-        else {
-          throw new Error(res.json());
-        }
-      })
-      .then((data) => {
-        setApiError(null);
-        // setUsers([...users, data]);
-        fetchUsers();
-      })
-      .catch((error) => {
-        setApiError(error.message);
-      });
+    };
+
+    fetchUsers(config, handleUpdateUsers);
   }
 
   return (
     <div>
+      {isLoading && <p>Loading...</p>}
+      {error && <p>Server error: {error}</p>}
       <CreateUser addUser={addUser} />
-      <button onClick={fetchUsers}>Fetch Users</button>
-      <Users users={users} apiError={apiError} onUpdateUser={updateUser} onDeleteUser={deleteUser} />
+      <Users users={users} apiError={error} onUpdateUser={updateUser} onDeleteUser={deleteUser} />
     </div>
   );
 }

@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 
-export default function Users({ users, apiError, onDeleteUser, onUpdateUser }) {
+export default function Users({ users, onDeleteUser, onUpdateUser }) {
   const [selectedUser, setSelectedUser] = useState(null);
   const [enteredValues, setEnteredValues] = useState({
     name: "",
@@ -81,7 +81,6 @@ export default function Users({ users, apiError, onDeleteUser, onUpdateUser }) {
           </li>
         ))}
       </ul>
-      {apiError && <p>{apiError}</p>}
     </div>
   );
 }
