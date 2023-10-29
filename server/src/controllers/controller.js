@@ -15,10 +15,10 @@ module.exports = {
 
     User.create(user)
       .then((user) => {
-        res.json(user);
+        return res.json(user);
       })
       .catch((err) => {
-        res.status("500").json({
+        return res.status(500).json({
           message: "Error creating user",
           error: err,
         });
@@ -28,10 +28,10 @@ module.exports = {
   async getUsers(req, res) {
     User.findAll()
       .then((users) => {
-        res.json(users);
+        return res.json(users);
       })
       .catch((err) => {
-        res.status("500").json({
+        return res.status(500).json({
           message: "Error getting users",
           error: err,
         });
@@ -40,12 +40,15 @@ module.exports = {
 
   async getUser(req, res) {
     const { id } = req.params;
+
+    if (!id) return res.status(400).json({ message: "User not found" });
+
     User.findByPk(id)
       .then((user) => {
-        res.json(user);
+        return res.json(user);
       })
       .catch((err) => {
-        res.status("500").json({
+        return res.status(500).json({
           message: "Error getting user",
           error: err,
         });
@@ -54,30 +57,33 @@ module.exports = {
 
   async updateUser(req, res) {
     const { id } = req.params;
+    
+    if (!id) return res.status(400).json({ message: "User not found" });
+    
     const user = await User.findByPk(id);
-    
+
     if (!user) {
-      res.status("404").json({ message: "User not found" });
+      return res.status(400).json({ message: "User not found" });
     }
-    
+
     const payload = {
       name: req.body.name || user.name,
       email: req.body.email || user.email,
       password: req.body.password || user.password,
-    }
-    
+    };
+
     User.update(payload, {
       where: { id: id },
     })
       .then((affectedCount) => {
         if (affectedCount > 0) {
-          res.json({ message: "User updated" });
+          return res.json({ message: "User updated" });
         } else {
-          res.status("404").json({ message: "Error updating user" });
+          return res.status(400).json({ message: "Error updating user" });
         }
       })
       .catch((err) => {
-        res.status("500").json({
+        return res.status(500).json({
           message: "Error updating user",
           error: err,
         });
@@ -86,20 +92,21 @@ module.exports = {
 
   async deleteUser(req, res) {
     const { id } = req.params;
+    
+    if (!id) return res.status(400).json({ message: "User not found" });
+    
     const user = await User.findByPk(id);
-    
-    if (!user) {
-      res.status("404").json({ message: "User not found" });
-    }
-    
+
+    if (!user) return res.status(400).json({ message: "User not found" });
+
     User.destroy({
       where: { id: id },
     }).then((affectedCount) => {
       if (affectedCount > 0) {
-        res.json({ message: "User deleted" });
+        return res.json({ message: "User deleted" });
       } else {
-        res.status("404").json({ message: "Error deleting user" });
+        return res.status(400).json({ message: "Error deleting user" });
       }
-    })
+    });
   },
 };
