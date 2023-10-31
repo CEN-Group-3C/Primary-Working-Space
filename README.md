@@ -1,4 +1,4 @@
-# User Management System Example
+# User Management App Example
 
 Example project demonstrating the use of Node.js, Express, PostgreSQL, React, and Docker.
 
