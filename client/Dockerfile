@@ -1,25 +1,32 @@
+# Define the image to use. Bookworm runs Node 20 inside a Debian container.
+# View node:20-bookworm image here: https://hub.docker.com/_/node
 FROM node:20-bookworm AS setup
 LABEL maintainer="Isaac Hunter, web@ikehunter.dev"
 
-COPY ./package.json /app/package.json
-COPY ./package-lock.json /app/package-lock.json
-COPY ./index.html /app/index.html
-COPY ./vite.config.js /app/vite.config.js
+# Copy essential node & npm files to the container for initialization
+COPY ./package.json /app/client/package.json
+COPY ./package-lock.json /app/client/package-lock.json
+COPY ./index.html /app/client/index.html
+COPY ./vite.config.js /app/client/vite.config.js
 
-WORKDIR /app
+# Set the working directory to /app/client
+WORKDIR /app/client/
 
-RUN npm install
+# Install the dependencies inside container
+RUN npm install && \
+    npm install -g rimraf
 
-COPY ./src /app/src
+# Copy the rest of the files to the container
+COPY ./src /app/client/src
 
-RUN npm run build
+# Build the app
+RUN rimraf ./dist && \
+    mkdir ./dist && \
+    npm run build
 
-EXPOSE 5173
-VOLUME /app/dist
+# Creates a volume for the dist folder so that the server can access it
+VOLUME /app/client/dist
 
-CMD ["npm", "run", "dev"]
-
-
-
-
-
+# EXPOSE and CMD are not needed for the client container
+# because it is not a server. It is only used to build the
+# static files for the server to serve.

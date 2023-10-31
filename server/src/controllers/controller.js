@@ -1,12 +1,29 @@
+/**
+ * @fileoverview Controller for the api routes.
+ *
+ * In the MVC pattern, the controller is responsible for handling the
+ * logic of the application. It receives the request, processes it,
+ * and returns the response.
+ */
+
 const User = require("../models/user.js");
 
 module.exports = {
+  /** 
+   * @api {get} / 
+   * @apiDescription Index Route
+   */
   async index(req, res) {
-    res.json({ message: "Index Route" });
+    res.json({ message: "Hello from Node.js!" });
   },
 
+  /** 
+   * @api {post} /users 
+   * @apiDescription Create a new user
+   */
   async createUser(req, res) {
     const { name, email, password } = req.body;
+    
     const user = {
       name: name,
       email: email,
@@ -25,6 +42,10 @@ module.exports = {
       });
   },
 
+  /** 
+   * @api {get} /users 
+   * @apiDescription Get all users
+   */
   async getUsers(req, res) {
     User.findAll()
       .then((users) => {
@@ -38,10 +59,14 @@ module.exports = {
       });
   },
 
+  /** 
+   * @api {get} /users/:id 
+   * @apiDescription Get a user by id
+   */
   async getUser(req, res) {
     const { id } = req.params;
 
-    if (!id) return res.status(400).json({ message: "User not found" });
+    if (!id) return res.status(404).json({ message: "User not found" });
 
     User.findByPk(id)
       .then((user) => {
@@ -55,11 +80,15 @@ module.exports = {
       });
   },
 
+  /** 
+   * @api {put} /users/:id 
+   * @apiDescription Update a user by id
+   */
   async updateUser(req, res) {
     const { id } = req.params;
-    
+
     if (!id) return res.status(400).json({ message: "User not found" });
-    
+
     const user = await User.findByPk(id);
 
     if (!user) {
@@ -90,11 +119,15 @@ module.exports = {
       });
   },
 
+  /** 
+   * @api {delete} /users/:id 
+   * @apiDescription Delete a user by id
+   */
   async deleteUser(req, res) {
     const { id } = req.params;
-    
+
     if (!id) return res.status(400).json({ message: "User not found" });
-    
+
     const user = await User.findByPk(id);
 
     if (!user) return res.status(400).json({ message: "User not found" });

@@ -1,3 +1,11 @@
+/**
+ * @fileoverview User model.
+ * 
+ * The model is responsible for handling the data of the application.
+ * It interacts with the database directly with sequelize.
+ * 
+ * Sequelize uses this model to create the table in the database.
+ */
 const { sq } = require("../database");
 const { DataTypes } = require("sequelize");
 

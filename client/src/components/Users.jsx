@@ -1,6 +1,22 @@
-/* eslint-disable no-unused-vars */
+/**
+ * Users Component.
+ * @param {array} props.users - Array of user objects
+ * @param {function} props.onDeleteUser - Function to delete a user
+ * @param {function} props.onUpdateUser - Function to update a user
+ *
+ * Renders a list of users, and dynamically displays a form to update
+ * user fields if the user is selected for update. Also display a delete
+ * button for each user.
+ * 
+ * Topics involved:
+ * - React hooks
+ * - Conditional rendering
+ * - Accessing props using js destructuring
+ * - Passing props to standard html elements
+ * - State management
+ * - Form handling via state
+ */
 import React, { useState } from "react";
-import PropTypes from "prop-types";
 
 export default function Users({ users, onDeleteUser, onUpdateUser }) {
   const [selectedUser, setSelectedUser] = useState(null);
@@ -10,6 +26,12 @@ export default function Users({ users, onDeleteUser, onUpdateUser }) {
     password: "",
   });
 
+  /**
+   * Mark the user as selected for update, and
+   * populate the form with the user's data.
+   *
+   * @param {object} user - User object
+   */
   function updateSelectedUser(user) {
     setSelectedUser(user.id);
 
@@ -20,6 +42,12 @@ export default function Users({ users, onDeleteUser, onUpdateUser }) {
     });
   }
 
+  /**
+   * Is called when a form input changes.
+   * Updates the enteredValues state with the form data.
+   *
+   * @param {object} event - Event object (passed by browser)
+   */
   function inputChangeHandler(event) {
     setEnteredValues((prevState) => ({
       ...prevState,
@@ -27,8 +55,19 @@ export default function Users({ users, onDeleteUser, onUpdateUser }) {
     }));
   }
 
+  /**
+   * Called when the form is submitted.
+   * Calls the onUpdateUser function, and resets the form
+   * by setting the enteredValues state to empty strings and
+   * the selectedUser state to null.
+   *
+   * @param {object} event - Event object (passed by browser)
+   */
   function submitHandler(event) {
+    /** Prevent page from reloading */
     event.preventDefault();
+    
+    /** ...then update state */
     onUpdateUser(selectedUser, enteredValues.name, enteredValues.email, enteredValues.password);
     setSelectedUser(null);
     setEnteredValues({
@@ -43,6 +82,7 @@ export default function Users({ users, onDeleteUser, onUpdateUser }) {
       <ul>
         {users.map((user) => (
           <li key={user.id}>
+            {/* If the user is selected for edit */}
             {selectedUser === user.id && (
               <form onSubmit={submitHandler}>
                 <input
@@ -66,9 +106,10 @@ export default function Users({ users, onDeleteUser, onUpdateUser }) {
                   value={enteredValues.password}
                   onChange={inputChangeHandler}
                 />
-                <button type="submit">Submit</button>
+                <button type="submit">Save</button>
               </form>
             )}
+            {/* If the user is not selected for edit */}
             {selectedUser !== user.id && (
               <div>
                 <p>
