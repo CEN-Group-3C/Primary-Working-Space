@@ -21,6 +21,20 @@ Once you pull the project down and are inside the root directory, run the follow
 docker-compose up --build
 ```
 
+### Cleanup
+
+After you are done with the project, run the following command to remove the containers:
+
+```sh
+docker-compose down
+```
+
+If you want to remove the volumes (helpful for debugging), add the `-v` flag:
+
+```sh
+docker-compose down -v
+```
+
 ## Environments
 
 - `localhost:1337`: Node.js server
@@ -32,6 +46,7 @@ Below are the endpoints that are available for the Node.js server.
 
 | Method | Route | Description |
 | ------ | ----- | ----------- |
+| GET    | `/` | Returns a build version of the React app |
 | GET    | `/api` | Returns a welcome message |
 | GET    | `/api/users` | Returns all users |
 | GET    | `/api/users/:id` | Returns a single user |

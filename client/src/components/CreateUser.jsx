@@ -1,16 +1,16 @@
 /**
  * Create user component.
  * @param {object} props.addUser - Add user function
- * 
+ *
  * This component is responsible for creating new users. It
  * renders a form, then passes the form data to the addUser
  * function. This function is passed in from the App component.
- * 
+ *
  * Topics involved:
  * - React refs
  * - Form handling via refs
  * - Passing props
- * 
+ *
  * Refs vs State:
  * - Refs are used to access DOM nodes directly
  * - Refs do not cause a re-render when changed
@@ -42,10 +42,36 @@ export default function CreateUser(props) {
 
   return (
     <form onSubmit={submitHandler}>
-      <input type="text" placeholder="name" ref={nameInputRef} />
-      <input type="text" placeholder="email" ref={emailInputRef} />
-      <input type="text" placeholder="password" ref={passwordInputRef} />
-      <button type="submit">Submit</button>
+      <div className="row g-3">
+        <div className="form-group col">
+          <label htmlFor="name" className="form-label">
+            Name
+          </label>
+          <input type="text" placeholder="John Doe" ref={nameInputRef} className="form-control" />
+        </div>
+        <div className="col">
+          <label htmlFor="email" className="form-label">
+            Email
+          </label>
+          <input type="text" placeholder="john@example.com" ref={emailInputRef} className="form-control" />
+        </div>
+        <div className="col">
+          <label htmlFor="password" className="form-label">
+            Password
+          </label>
+          <input
+            type="text"
+            placeholder="SuperSecurePassword123!"
+            ref={passwordInputRef}
+            className="form-control"
+          />
+        </div>
+        <div className="col-12">
+          <button type="submit" className="btn btn-success col-2">
+            Submit
+          </button>
+        </div>
+      </div>
     </form>
   );
 }

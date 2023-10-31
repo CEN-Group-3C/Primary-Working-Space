@@ -22,6 +22,7 @@ import { useState, useEffect } from "react";
 import Users from "./components/Users.jsx";
 import CreateUser from "./components/CreateUser.jsx";
 import useHttp from "./hooks/use-http";
+import "./App.css";
 
 const serverPort = 1337;
 const serverHost = "localhost";
@@ -127,18 +128,27 @@ export default function App() {
 
   /** Renders the component in JSX. */
   return (
-    <div>
+    <div className="container main-content">
       <h1>User Management Example</h1>
       <code>Hello from React😎</code>
       {/* Conditionally render Loading and/or error text. */}
       {isLoading && <p>Loading...</p>}
       {error && <p>Server error: {error}</p>}
-      <div>
-        <h3>Create New User</h3>
-        {/* Insert CreateUser and Users components, pass state and functions as props. */}
-        <CreateUser addUser={addUser} />
-        {users.length > 0 && <h3>View Users and perform update or delete</h3>}
-        <Users users={users} apiError={error} onUpdateUser={updateUser} onDeleteUser={deleteUser} />
+      <div className="users">
+        <div className="create-user">
+          <h3>Create New User</h3>
+          {/* Insert CreateUser and Users components, pass state and functions as props. */}
+          <CreateUser addUser={addUser} />
+        </div>
+        <div className="users-list">
+          {users.length > 0 && <h3>View, Update, or Delete Users</h3>}
+          <Users
+            users={users}
+            apiError={error}
+            onUpdateUser={updateUser}
+            onDeleteUser={deleteUser}
+          />
+        </div>
       </div>
     </div>
   );

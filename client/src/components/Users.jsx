@@ -7,7 +7,7 @@
  * Renders a list of users, and dynamically displays a form to update
  * user fields if the user is selected for update. Also display a delete
  * button for each user.
- * 
+ *
  * Topics involved:
  * - React hooks
  * - Conditional rendering
@@ -66,7 +66,7 @@ export default function Users({ users, onDeleteUser, onUpdateUser }) {
   function submitHandler(event) {
     /** Prevent page from reloading */
     event.preventDefault();
-    
+
     /** ...then update state */
     onUpdateUser(selectedUser, enteredValues.name, enteredValues.email, enteredValues.password);
     setSelectedUser(null);
@@ -78,47 +78,71 @@ export default function Users({ users, onDeleteUser, onUpdateUser }) {
   }
 
   return (
-    <div>
-      <ul>
+    <div className="users-component">
+      <ul className="list-group">
         {users.map((user) => (
-          <li key={user.id}>
+          <li key={user.id} className="list-group-item">
             {/* If the user is selected for edit */}
             {selectedUser === user.id && (
               <form onSubmit={submitHandler}>
-                <input
-                  type="text"
-                  placeholder="name"
-                  name="name"
-                  value={enteredValues.name}
-                  onChange={inputChangeHandler}
-                />
-                <input
-                  type="text"
-                  placeholder="email"
-                  name="email"
-                  value={enteredValues.email}
-                  onChange={inputChangeHandler}
-                />
-                <input
-                  type="text"
-                  placeholder="password"
-                  name="password"
-                  value={enteredValues.password}
-                  onChange={inputChangeHandler}
-                />
-                <button type="submit">Save</button>
+                <div className="row">
+                  <div className="col">
+                    <input
+                      type="text"
+                      placeholder="name"
+                      name="name"
+                      value={enteredValues.name}
+                      onChange={inputChangeHandler}
+                      className="form-control"
+                    />
+                  </div>
+                  <div className="col">
+                    <input
+                      type="text"
+                      placeholder="email"
+                      name="email"
+                      value={enteredValues.email}
+                      onChange={inputChangeHandler}
+                      className="form-control"
+                    />
+                  </div>
+                  <div className="col">
+                    <input
+                      type="text"
+                      placeholder="password"
+                      name="password"
+                      value={enteredValues.password}
+                      onChange={inputChangeHandler}
+                      className="form-control"
+                    />
+                  </div>
+
+                  <button type="submit" className="col-2 btn btn-success">
+                    Save
+                  </button>
+                </div>
               </form>
             )}
             {/* If the user is not selected for edit */}
             {selectedUser !== user.id && (
               <div>
-                <p>
-                  {user.name} - {user.email} - {user.password}
-                </p>
-                <button onClick={(e) => updateSelectedUser(user)}>Update</button>
+                {user.name} - {user.email} - {user.password}
+                <div className="list-item-actions">
+                  <button
+                    onClick={(e) => updateSelectedUser(user)}
+                    type="button"
+                    className="btn btn-primary">
+                    Update
+                  </button>
+                  <button
+                    onClick={(e) => onDeleteUser(user.id)}
+                    type="button"
+                    className="btn btn-danger">
+                    Delete
+                  </button>{" "}
+                </div>
               </div>
             )}
-            <button onClick={(e) => onDeleteUser(user.id)}>Delete</button>{" "}
           </li>
         ))}
       </ul>
