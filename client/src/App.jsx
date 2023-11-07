@@ -1,28 +1,12 @@
 /**
  * App component
- *
- * Primary component for the application.
- * Topics involved:
- * - React hooks
- * - Custom hooks
- * - Fetching data from the server
- * - Error handling
- * - Conditional rendering
- * - Passing props
- * - State management
- *
- * React hooks:
- * - useState
- * - useEffect
- *
- * Custom hooks:
- * - useHttp
  */
 import { useState, useEffect } from "react";
 import Users from "./components/Users.jsx";
 import CreateUser from "./components/CreateUser.jsx";
 import useHttp from "./hooks/use-http";
 import "./App.css";
+import { Toolbox } from "./blockly/Toolbox.jsx";
 
 const serverPort = 1337;
 const serverHost = "localhost";
@@ -125,31 +109,37 @@ export default function App() {
 
     fetchUsers(config, handleUpdateUsers);
   }
+  
+  return (
+    // <div id="blocklyDiv" style="height: 480px; width: 600px;"></div>
+    // <Toolbox />
+    <Toolbox />
+  );
 
   /** Renders the component in JSX. */
-  return (
-    <div className="container main-content">
-      <h1>User Management Example</h1>
-      <code>Hello from React😎</code>
-      {/* Conditionally render Loading and/or error text. */}
-      {isLoading && <p>Loading...</p>}
-      {error && <p>Server error: {error}</p>}
-      <div className="users">
-        <div className="create-user">
-          <h3>Create New User</h3>
-          {/* Insert CreateUser and Users components, pass state and functions as props. */}
-          <CreateUser addUser={addUser} />
-        </div>
-        <div className="users-list">
-          {users.length > 0 && <h3>View, Update, or Delete Users</h3>}
-          <Users
-            users={users}
-            apiError={error}
-            onUpdateUser={updateUser}
-            onDeleteUser={deleteUser}
-          />
-        </div>
-      </div>
-    </div>
-  );
+  // return (
+  //   <div className="container main-content">
+  //     <h1>User Management Example</h1>
+  //     <code>Hello from React😎</code>
+  //     {/* Conditionally render Loading and/or error text. */}
+  //     {isLoading && <p>Loading...</p>}
+  //     {error && <p>Server error: {error}</p>}
+  //     <div className="users">
+  //       <div className="create-user">
+  //         <h3>Create New User</h3>
+  //         {/* Insert CreateUser and Users components, pass state and functions as props. */}
+  //         <CreateUser addUser={addUser} />
+  //       </div>
+  //       <div className="users-list">
+  //         {users.length > 0 && <h3>View, Update, or Delete Users</h3>}
+  //         <Users
+  //           users={users}
+  //           apiError={error}
+  //           onUpdateUser={updateUser}
+  //           onDeleteUser={deleteUser}
+  //         />
+  //       </div>
+  //     </div>
+  //   </div>
+  // );
 }
